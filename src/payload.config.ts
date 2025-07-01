@@ -3,7 +3,7 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
-import { buildConfig, PayloadRequest } from 'payload'
+import { buildConfig, PayloadRequest, type TextField} from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
@@ -14,8 +14,11 @@ import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
-import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { BlocksFeature, EXPERIMENTAL_TableFeature, lexicalEditor, LinkFeature, UploadFeature } from '@payloadcms/richtext-lexical'
+import { link } from './fields/link'
+import { LabelFeature } from './fields/richText/features/label/server'
+import { LargeBodyFeature } from './fields/richText/features/largeBody/server'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,12 +26,6 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
-      beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
-      beforeDashboard: ['@/components/BeforeDashboard'],
     },
     importMap: {
       baseDir: path.resolve(dirname),
@@ -58,7 +55,66 @@ export default buildConfig({
     },
   },
   // This config helps us configure global or default features that the other editors can inherit
-  editor: defaultLexical,
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures.filter((feature) => feature.key !== 'link'),
+      LinkFeature({
+        fields({ defaultFields }) {
+          return [
+            ...defaultFields.filter((field) => field.name !== 'url'),
+            {
+              // Own url field to disable URL encoding links starting with '../'
+              name: 'url',
+              type: 'text',
+              label: ({ t }) => t('fields:enterURL'),
+              required: true,
+              validate: (value: string, options) => {
+                return
+              },
+            } as TextField,
+          ]
+        },
+      }),
+      EXPERIMENTAL_TableFeature(),
+      UploadFeature({
+        collections: {
+          media: {
+            fields: [
+              {
+                name: 'enableLink',
+                type: 'checkbox',
+                label: 'Enable Link',
+              },
+              link({
+                appearances: false,
+                disableLabel: true,
+                overrides: {
+                  admin: {
+                    condition: (_, data) => Boolean(data?.enableLink),
+                  },
+                },
+              }),
+            ],
+          },
+        },
+      }),
+      LabelFeature(),
+      LargeBodyFeature(),
+      BlocksFeature({
+        blocks: [
+          // 'spotlight',
+          // 'video',
+          // 'br',
+          // 'Banner',
+          // 'VideoDrawer',
+          // 'templateCards',
+          // 'Code',
+          // 'downloadBlock',
+          // 'commandLine',
+        ],
+      }),
+    ],
+  }),
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI || '',

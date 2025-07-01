@@ -155,7 +155,7 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'fullScreenVideo';
     richText?: {
       root: {
         type: string;
@@ -196,6 +196,11 @@ export interface Page {
         }[]
       | null;
     media?: (number | null) | Media;
+    video?: (number | null) | Media;
+    fallbackImage?: (number | null) | Media;
+    overlayOpacity?: number | null;
+    textAlignment?: ('left' | 'center' | 'right') | null;
+    parallaxIntensity?: number | null;
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
@@ -1052,6 +1057,11 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        video?: T;
+        fallbackImage?: T;
+        overlayOpacity?: T;
+        textAlignment?: T;
+        parallaxIntensity?: T;
       };
   layout?:
     | T

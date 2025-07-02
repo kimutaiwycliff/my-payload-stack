@@ -53,7 +53,7 @@ export const FullscreenVideoHero:React.FC<Page['hero']> = ({
 
   return (
     <div
-      className="relative -mt-[10.4rem] w-full h-screen overflow-hidden text-white"
+      className="relative  w-full h-screen overflow-hidden text-white"
       data-theme="dark"
     >
       {/* Video */}

@@ -35,7 +35,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           /> */}
 
           <Header />
-          {children}
+          <main className="container">{children}</main>
+
           <Footer />
         </Providers>
       </body>

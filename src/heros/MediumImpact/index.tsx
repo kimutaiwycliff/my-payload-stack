@@ -5,15 +5,19 @@ import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import Bounded from '@/components/Bounded'
+import StarGrid from '@/components/StarGrid'
 
 export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
   return (
-    <div className="">
-      <div className="container mb-8">
+    <Bounded>
+      <div className="relative">
+        <StarGrid />
+        <div className=" mb-8 mx-auto">
         {richText && <RichText className="mb-6" data={richText} enableGutter={false} />}
 
         {Array.isArray(links) && links.length > 0 && (
-          <ul className="flex gap-4">
+          <ul className="flex gap-4 mx-auto items-center justify-center">
             {links.map(({ link }, i) => {
               return (
                 <li key={i}>
@@ -24,7 +28,7 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richTex
           </ul>
         )}
       </div>
-      <div className="container ">
+      <div>
         {media && typeof media === 'object' && (
           <div>
             <Media
@@ -32,15 +36,13 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richTex
               imgClassName=""
               priority
               resource={media}
+              pictureClassName='rounded-xl'
             />
-            {media?.caption && (
-              <div className="mt-3">
-                <RichText data={media.caption} enableGutter={false} />
-              </div>
-            )}
           </div>
         )}
       </div>
-    </div>
+      </div>
+
+    </Bounded>
   )
 }

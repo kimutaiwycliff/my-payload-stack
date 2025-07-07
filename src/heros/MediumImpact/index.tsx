@@ -15,6 +15,7 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richTex
       <div className="relative">
         <StarGrid />
         <div className=" mb-8 mx-auto backdrop-blur-sm/70">
+
           {richText && (
             <RichText
               className="mb-6 text-balance text-center"
@@ -38,6 +39,7 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richTex
         <div>
           {media && typeof media === 'object' && (
             <div className="relative">
+               
               <BackgroundGradient className="rounded-3xl  bg-white dark:bg-zinc-900 ">
               <Media
                 className=""

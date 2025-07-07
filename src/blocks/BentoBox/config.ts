@@ -36,16 +36,7 @@ export const BentoBox: Block = {
           relationTo: 'media',
           required: true
         },
-        {
-          name: 'Appearance',
-          type: 'select',
-          defaultValue: 'narrow',
-          options: [
-            { label: 'Narrow', value: 'narrow' },
-            { label: 'Wide', value: 'wide' },
-          ],
-          required: false
-        }
+        
       ],
       required: true
     }

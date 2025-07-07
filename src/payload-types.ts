@@ -823,7 +823,6 @@ export interface BentoBoxBlock {
       [k: string]: unknown;
     } | null;
     Image: number | Media;
-    Appearance?: ('narrow' | 'wide') | null;
     id?: string | null;
   }[];
   id?: string | null;
@@ -1242,7 +1241,6 @@ export interface BentoBoxBlockSelect<T extends boolean = true> {
         Title?: T;
         Description?: T;
         Image?: T;
-        Appearance?: T;
         id?: T;
       };
   id?: T;

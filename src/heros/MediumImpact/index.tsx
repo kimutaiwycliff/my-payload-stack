@@ -7,14 +7,14 @@ import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 import Bounded from '@/components/Bounded'
 import StarGrid from '@/components/StarGrid'
-import { GlowingEffect } from '@/components/ui/glowing-effect'
+import { BackgroundGradient } from '@/components/ui/background-gradient'
 
 export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
   return (
     <Bounded>
       <div className="relative">
         <StarGrid />
-        <div className=" mb-8 mx-auto">
+        <div className=" mb-8 mx-auto backdrop-blur-sm/70">
           {richText && (
             <RichText
               className="mb-6 text-balance text-center"
@@ -38,20 +38,14 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richTex
         <div>
           {media && typeof media === 'object' && (
             <div className="relative">
-              <GlowingEffect
-                spread={40}
-                glow={true}
-                disabled={false}
-                proximity={64}
-                inactiveZone={0.01}
-                className='absolute -mx-4 md:-mx-8 2xl:-mx-16 rounded-xl'
-              />
+              <BackgroundGradient className="rounded-3xl  bg-white dark:bg-zinc-900 ">
               <Media
-                className="-mx-4 md:-mx-8 2xl:-mx-16"
-                imgClassName="rounded-xl"
+                className=""
+                imgClassName="rounded-3xl "
                 priority
                 resource={media}
               />
+              </BackgroundGradient>
             </div>
           )}
         </div>

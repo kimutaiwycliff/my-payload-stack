@@ -21,6 +21,7 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { BentoBox } from '@/blocks/BentoBox/config'
+import { ShowCase } from '@/blocks/Showcase/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -76,7 +77,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, BentoBox],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, BentoBox, ShowCase],
               required: true,
               admin: {
                 initCollapsed: true,

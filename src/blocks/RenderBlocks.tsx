@@ -8,6 +8,7 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { BentoBoxBlock } from './BentoBox/Component'
+import { ShowcaseBlock } from './Showcase/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -15,7 +16,8 @@ const blockComponents = {
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
-  bentoBox: BentoBoxBlock
+  bentoBox: BentoBoxBlock,
+  showcase: ShowcaseBlock
 }
 
 export const RenderBlocks: React.FC<{

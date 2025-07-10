@@ -10,6 +10,7 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { BentoBoxBlock } from './BentoBox/Component'
 import { ShowcaseBlock } from './Showcase/Component'
 import { CaseStudiesBlock } from './CaseStudies/Component'
+import { DataTableBlock } from './DataTable/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -19,7 +20,8 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   bentoBox: BentoBoxBlock,
   showcase: ShowcaseBlock,
-  caseStudies: CaseStudiesBlock
+  caseStudies: CaseStudiesBlock,
+  dataTable: DataTableBlock
 }
 
 export const RenderBlocks: React.FC<{

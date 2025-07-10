@@ -23,6 +23,7 @@ import {
 import { BentoBox } from '@/blocks/BentoBox/config'
 import { ShowCase } from '@/blocks/Showcase/config'
 import { CaseStudies } from '@/blocks/CaseStudies/config'
+import { DataTableBlock } from '@/blocks/DataTable/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -87,6 +88,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 BentoBox,
                 ShowCase,
                 CaseStudies,
+                DataTableBlock
               ],
               required: true,
               admin: {

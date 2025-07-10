@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 import { DataTableViewOptions } from "./data-table-view-options"
 
-interface FilterConfig {
+export interface FilterConfig {
   column: string
   title: string
   options: {
@@ -27,7 +27,7 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
   searchColumns = ["title"],
-  searchPlaceholder = "Filter items...",
+  searchPlaceholder = "Filter items by ...",
   filterConfigs = [],
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0

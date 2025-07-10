@@ -241,6 +241,7 @@ export interface Page {
     | BentoBoxBlock
     | ShowcaseBlock
     | CaseStudiesBlock
+    | DataTableBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1028,6 +1029,24 @@ export interface CaseStudiesBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DataTableBlock".
+ */
+export interface DataTableBlock {
+  collection: 'customers' | 'posts' | 'pages' | 'categories';
+  filters?:
+    | {
+        field: string;
+        value?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  defaultPageSize?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'dataTable';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "customers".
  */
 export interface Customer {
@@ -1372,6 +1391,7 @@ export interface PagesSelect<T extends boolean = true> {
         bentoBox?: T | BentoBoxBlockSelect<T>;
         showcase?: T | ShowcaseBlockSelect<T>;
         caseStudies?: T | CaseStudiesBlockSelect<T>;
+        dataTable?: T | DataTableBlockSelect<T>;
       };
   meta?:
     | T
@@ -1531,6 +1551,23 @@ export interface CaseStudiesBlockSelect<T extends boolean = true> {
         companyLogo?: T;
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DataTableBlock_select".
+ */
+export interface DataTableBlockSelect<T extends boolean = true> {
+  collection?: T;
+  filters?:
+    | T
+    | {
+        field?: T;
+        value?: T;
+        id?: T;
+      };
+  defaultPageSize?: T;
   id?: T;
   blockName?: T;
 }

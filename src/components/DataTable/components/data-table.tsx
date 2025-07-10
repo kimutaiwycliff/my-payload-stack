@@ -26,15 +26,25 @@ import {
 } from '@/components/ui/table'
 
 import { DataTablePagination } from './data-table-pagination'
-import { DataTableToolbar } from './data-table-toolbar'
-import { priorities, statuses } from '../data/data'
+import { DataTableToolbar, FilterConfig } from './data-table-toolbar'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  searchColumns?: string[]
+  searchPlaceholder?: string
+  filterConfigs?: FilterConfig[]
+  defaultPageSize?: number
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  searchColumns,
+  searchPlaceholder,
+  filterConfigs,
+  defaultPageSize = 10,
+}: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -51,7 +61,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     },
     initialState: {
       pagination: {
-        pageSize: 25,
+        pageSize: defaultPageSize,
       },
     },
     enableRowSelection: true,
@@ -71,20 +81,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     <div className="flex flex-col gap-4">
       <DataTableToolbar
         table={table}
-        searchColumns={['id','title']}
-        searchPlaceholder="Search items by title, id "
-        filterConfigs={[
-          {
-            column: 'status',
-            title: 'Status',
-            options: statuses,
-          },
-          {
-            column: 'priority',
-            title: 'Priority',
-            options: priorities,
-          },
-        ]}
+        searchColumns={searchColumns}
+        searchPlaceholder={searchPlaceholder}
+        filterConfigs={filterConfigs}
       />
       <div className="rounded-md border">
         <Table>

@@ -19,6 +19,7 @@ import { BlocksFeature, EXPERIMENTAL_TableFeature, lexicalEditor, LinkFeature, U
 import { link } from './fields/link'
 import { LabelFeature } from './fields/richText/features/label/server'
 import { LargeBodyFeature } from './fields/richText/features/largeBody/server'
+import { Customers } from './collections/Customers/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -120,7 +121,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Users, Customers],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

@@ -3,7 +3,7 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
-import { buildConfig, PayloadRequest, type TextField} from 'payload'
+import { buildConfig, PayloadRequest, type TextField } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
@@ -14,8 +14,14 @@ import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
-import { getServerSideURL } from './utilities/getURL'
-import { BlocksFeature, EXPERIMENTAL_TableFeature, lexicalEditor, LinkFeature, UploadFeature } from '@payloadcms/richtext-lexical'
+import { resendAdapter } from '@payloadcms/email-resend'
+import {
+  BlocksFeature,
+  EXPERIMENTAL_TableFeature,
+  lexicalEditor,
+  LinkFeature,
+  UploadFeature,
+} from '@payloadcms/richtext-lexical'
 import { link } from './fields/link'
 import { LabelFeature } from './fields/richText/features/label/server'
 import { LargeBodyFeature } from './fields/richText/features/largeBody/server'
@@ -26,12 +32,18 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    components: {
-    },
+    components: {},
     importMap: {
       baseDir: path.resolve(dirname),
     },
     user: Users.slug,
+    autoLogin:
+      process.env.NEXT_PUBLIC_ENABLE_AUTOLOGIN === 'true'
+        ? {
+            email: 'admin@gmail.com',
+            password: 'admin',
+          }
+        : false,
     livePreview: {
       breakpoints: [
         {
@@ -122,7 +134,13 @@ export default buildConfig({
     },
   }),
   collections: [Pages, Posts, Media, Categories, Users, Customers],
-  cors: [getServerSideURL()].filter(Boolean),
+  cors: ['http://localhost:3000', process.env.DOMAIN_NAME || ''],
+  csrf: ['http://localhost:3000', process.env.DOMAIN_NAME || ''],
+  upload: {
+    limits: {
+      fileSize: 5000000,
+    },
+  },
   globals: [Header, Footer],
   plugins: [
     ...plugins,
@@ -148,4 +166,9 @@ export default buildConfig({
     },
     tasks: [],
   },
+  email: resendAdapter({
+    defaultFromAddress: 'nick@midlowebdesign.com',
+    defaultFromName: 'Nick',
+    apiKey: process.env.RESEND_API || '',
+  }),
 })

@@ -1035,8 +1035,15 @@ export interface DataTableBlock {
   collection: 'customers' | 'posts' | 'pages' | 'categories';
   filters?:
     | {
-        field: string;
-        value?: string | null;
+        column: string;
+        title: string;
+        options?:
+          | {
+              label: string;
+              value: string;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1563,8 +1570,15 @@ export interface DataTableBlockSelect<T extends boolean = true> {
   filters?:
     | T
     | {
-        field?: T;
-        value?: T;
+        column?: T;
+        title?: T;
+        options?:
+          | T
+          | {
+              label?: T;
+              value?: T;
+              id?: T;
+            };
         id?: T;
       };
   defaultPageSize?: T;

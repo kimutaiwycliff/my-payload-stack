@@ -1,25 +1,28 @@
 'use client'
 
 import * as React from 'react'
-import { buildColumnsFromData } from '@/utilities/buildColumnsFromData'
+import { buildColumnsFromData, getSearchColumns } from '@/utilities/buildColumnsFromData'
 import { DataTable } from '@/components/DataTable/components/data-table'
+import { FilterConfig } from '@/components/DataTable/components/data-table-toolbar'
 
 type Props = {
   data: any[]
-  defaultPageSize: number
+  defaultPageSize?: number
+  filterConfigs?: FilterConfig[]
 }
 
-export default function DataTableBlockRenderer({ data, defaultPageSize }: Props) {
+export default function DataTableBlockRenderer({ data, defaultPageSize, filterConfigs }: Props) {
   const columns = React.useMemo(() => buildColumnsFromData(data), [data])
+  const searchCols = React.useMemo(() => getSearchColumns(columns), [columns])
 
   return (
     <DataTable
       columns={columns}
       data={data}
       defaultPageSize={defaultPageSize}
-      searchColumns={columns.map((col) => col.id as string)}
+      searchColumns={searchCols}
       searchPlaceholder="Search..."
-      filterConfigs={[]}
+      filterConfigs={filterConfigs}
     />
   )
 }

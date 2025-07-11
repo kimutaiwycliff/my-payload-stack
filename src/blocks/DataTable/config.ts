@@ -19,37 +19,37 @@ export const DataTableBlock: Block = {
         { label: 'Categories', value: 'categories' },
       ],
     },
-    // {
-    //   name: 'columns',
-    //   type: 'array',
-    //   label: 'Columns',
-    //   required: true,
-    //   fields: [
-    //     {
-    //       name: 'field',
-    //       type: 'text',
-    //       required: true,
-    //     },
-    //     {
-    //       name: 'header',
-    //       type: 'text',
-    //       required: true,
-    //     },
-    //   ],
-    // },
     {
       name: 'filters',
       type: 'array',
       label: 'Filters',
       fields: [
         {
-          name: 'field',
+          name: 'column',
           type: 'text',
           required: true,
         },
         {
-          name: 'value',
+          name: 'title',
           type: 'text',
+          required: true,
+        },
+        {
+          name: 'options',
+          type: 'array',
+          required: false,
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'value',
+              type: 'text',
+              required: true,
+            },
+          ],
         },
       ],
     },

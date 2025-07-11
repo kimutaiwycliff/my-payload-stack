@@ -167,8 +167,8 @@ export default buildConfig({
     tasks: [],
   },
   email: resendAdapter({
-    defaultFromAddress: 'nick@midlowebdesign.com',
-    defaultFromName: 'Nick',
+    defaultFromAddress: 'kcliff@tutanota.com',
+    defaultFromName: 'Admin',
     apiKey: process.env.RESEND_API || '',
   }),
 })

@@ -60,7 +60,7 @@ export default function CreateForm(): ReactElement {
         <SubmitButton loading={isLoading} text={`Create account`} />
       </form>
       <div className={`mt-4`}>
-        <p className={`text-sm text-emerald-950/50`}>
+        <p className={`text-sm `}>
           Already have an account?{' '}
           <Link className={`underline underline-offset-4`} href={`/login`}>
             Login here.

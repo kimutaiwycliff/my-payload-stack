@@ -13,6 +13,8 @@ import { draftMode } from 'next/headers'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
+import { Header } from '@/Header/Component'
+import { Footer } from '@/Footer/Component'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
@@ -32,7 +34,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           /> */}
 
+          <Header />
           <main className="container">{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>

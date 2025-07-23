@@ -9,7 +9,7 @@ export const DataTableBlock: Block = {
   },
   fields: [
     {
-      name: 'collection',
+      name: 'targetCollection',
       type: 'select',
       required: true,
       options: [

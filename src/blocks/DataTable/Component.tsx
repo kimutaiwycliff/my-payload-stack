@@ -10,7 +10,7 @@ const DataTableBlockRenderer = dynamic(() => import('./DataTableBlockRenderer'),
 })
 
 export const DataTableBlock: React.FC<DataTableBlockProps> = async ({
-  collection,
+  targetCollection,
   defaultPageSize,
   filters
 }) => {
@@ -18,7 +18,7 @@ export const DataTableBlock: React.FC<DataTableBlockProps> = async ({
   const pageSize = defaultPageSize || 10
   const maxPages = 5
   const result = await payload.find({
-    collection: collection,
+    collection: targetCollection,
     limit: pageSize * maxPages,
     pagination: false,
     overrideAccess: false,

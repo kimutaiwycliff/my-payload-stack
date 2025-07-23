@@ -7,6 +7,8 @@ export const signIn = async (email: string, password: string) => {
             body: {
                 email,
                 password,
+                rememberMe: false,
+                callbackURL: "/"
             }
         })
 
@@ -24,13 +26,14 @@ export const signIn = async (email: string, password: string) => {
     }
 }
 
-export const signUp = async (email: string, password: string, username: string) => {
+export const signUp = async (name: string, email: string, password: string ) => {
     try {
         await auth.api.signUpEmail({
             body: {
+                name,
                 email,
                 password,
-                name: username
+                callbackURL: "/login"
             }
         })
 

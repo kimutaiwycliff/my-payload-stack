@@ -8,35 +8,37 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SignInSchema } from '@/components/Forms/FormSchema'
-import { SignInFormData } from '@/components/Forms/FormSchema'
-import { signIn } from '@/lib/actions/users'
+import { SignUpSchema } from '@/components/Forms/FormSchema'
+import { SignUpFormData } from '@/components/Forms/FormSchema'
+import { signUp } from '@/lib/actions/users'
 import { toast } from 'sonner'
 import { CustomFormField } from '@/components/Forms/CustomFormField'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { authClient } from '@/lib/auth-client'
 
-export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const form = useForm<SignInFormData>({
-    resolver: zodResolver(SignInSchema),
+  const form = useForm<SignUpFormData>({
+    resolver: zodResolver(SignUpSchema),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
   })
 
-  const onSubmit = async (values: SignInFormData) => {
-    const toastId = toast.loading('Signing in...')
+  const onSubmit = async (values: SignUpFormData) => {
+    const toastId = toast.loading('Signing up...')
     setIsLoading(true)
 
-    const { success, message } = await signIn(values.email, values.password)
+    const { success, message } = await signUp(values.name, values.email, values.password)
 
     if (success) {
       toast.success(message as string, { id: toastId })
-      router.push('/login')
+      router.push('/')
     } else {
       toast.error(message as string, { id: toastId })
     }
@@ -45,38 +47,38 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   }
 
   const signInWithGitHub = async () => {
-    const toastId = toast.loading('Signing in...')
-    setIsLoading(true)
-    await authClient.signIn.social(
-      {
-        provider: 'github',
-        callbackURL: '/',
-      },
-      {
-        onSuccess: () => {
-          setIsLoading(false)
-          toast.success('Signed in successfully', { id: toastId })
+      const toastId = toast.loading('Signing up...')
+      setIsLoading(true)
+      await authClient.signIn.social(
+        {
+          provider: 'github',
+          callbackURL: '/',
         },
-        onError: () => {
-          setIsLoading(false)
-          toast.error('Failed to sign in', { id: toastId })
+        {
+          onSuccess: () => {
+            setIsLoading(false)
+            toast.success('Signed up successfully', { id: toastId })
+          },
+          onError: () => {
+            setIsLoading(false)
+            toast.error('Failed to sign up', { id: toastId })
+          },
         },
-      },
-    )
-  }
+      )
+    }
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Login with your GitHub account</CardDescription>
+          <CardDescription>Sign up with your GitHub account</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
                 <div className="flex flex-col gap-4">
-                  <Button
+                <Button
                     variant="outline"
                     className="w-full flex items-center gap-2"
                     onClick={signInWithGitHub}
@@ -86,12 +88,12 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                     {isLoading ? (
                       <div className="flex items-center gap-2">
                         <Loader2 className="size-4 animate-spin" />
-                        <span>Signing in...</span>
+                        <span>Signing up...</span>
                       </div>
                     ) : (
                       <>
                         <FaGithub />
-                        Login with GitHub
+                        Sign up with GitHub
                       </>
                     )}
                   </Button>
@@ -102,6 +104,15 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   </span>
                 </div>
                 <div className="grid gap-6">
+                  <div className="grid gap-2">
+                    <CustomFormField
+                      name="name"
+                      label="Name"
+                      placeholder="John Doe"
+                      type="text"
+                      initialValue={''}
+                    />
+                  </div>
                   <div className="grid gap-2">
                     <CustomFormField
                       name="email"
@@ -117,7 +128,18 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                       label="Password"
                       placeholder="**************"
                       type="password"
-                      forgotPasswordLink={true}
+                      forgotPasswordLink={false}
+                      showPasswordStrength={true}
+                      initialValue={''}
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <CustomFormField
+                      name="confirmPassword"
+                      label="Confirm Password"
+                      placeholder="**************"
+                      type="password"
+                      forgotPasswordLink={false}
                       showPasswordStrength={false}
                       initialValue={''}
                     />
@@ -126,17 +148,17 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                     {isLoading ? (
                       <div className="flex items-center gap-2">
                         <Loader2 className="size-4 animate-spin" />
-                        <span>Signing in...</span>
+                        <span>Signing up...</span>
                       </div>
                     ) : (
-                      'Login'
+                      'Sign up'
                     )}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{' '}
-                  <Link href="/register" className="underline underline-offset-4">
-                    Sign up
+                  <Link href="/login" className="underline underline-offset-4">
+                    Sign in
                   </Link>
                 </div>
               </div>

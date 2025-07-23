@@ -37,7 +37,7 @@ export const signUp = async (name: string, email: string, password: string ) => 
 
         return {
             success: true,
-            message: "Signed up successfully."
+            message: "Signed up successfully. Please check your email for a verification email."
         }
     } catch (error) {
         const e = error as Error

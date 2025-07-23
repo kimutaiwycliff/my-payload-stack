@@ -1,18 +1,19 @@
-import { LoginForm } from '@/Forms/loginForm'
+import { ForgotPasswordForm } from '@/Forms/ForgotPasswordForm'
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 
-const LoginPage = async () => {
+const ForgotPasswordPage = async () => {
 
   const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!!session) {
+    if (session) {
       redirect('/');
     }
-  return <LoginForm />
+  return (
+   <ForgotPasswordForm />
+  )
 }
 
-export default LoginPage
-
+export default ForgotPasswordPage

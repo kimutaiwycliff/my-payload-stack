@@ -20,6 +20,7 @@ import { authClient } from '@/lib/auth-client'
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [isSocialLoading, setIsSocialLoading] = useState(false)
   const form = useForm<SignInFormData>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
@@ -46,7 +47,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
 
   const signInWithGitHub = async () => {
     const toastId = toast.loading('Signing in...')
-    setIsLoading(true)
+    setIsSocialLoading(true)
     await authClient.signIn.social(
       {
         provider: 'github',
@@ -54,11 +55,11 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       },
       {
         onSuccess: () => {
-          setIsLoading(false)
+          setIsSocialLoading(false)
           toast.success('Signed in successfully', { id: toastId })
         },
         onError: () => {
-          setIsLoading(false)
+          setIsSocialLoading(false)
           toast.error('Failed to sign in', { id: toastId })
         },
       },
@@ -81,9 +82,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                     className="w-full flex items-center gap-2"
                     onClick={signInWithGitHub}
                     type="button"
-                    disabled={isLoading}
+                    disabled={isSocialLoading}
                   >
-                    {isLoading ? (
+                    {isSocialLoading ? (
                       <div className="flex items-center gap-2">
                         <Loader2 className="size-4 animate-spin" />
                         <span>Signing in...</span>

@@ -96,7 +96,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
   }
 
   const getStrengthText = (score: number) => {
-    if (score === 0) return 'Enter a password'
+    if (score === 0) return 'Enter a STRONG password'
     if (score <= 2) return 'Weak password'
     if (score === 3) return 'Medium password'
     return 'Strong password'

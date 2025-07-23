@@ -101,3 +101,23 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+/* Sonner Toast Colors */
+[data-sonner-toast][data-type="success"] {
+  background-color: #10b981 !important;
+  border-color: #059669 !important;
+  color: white !important;
+}
+
+[data-sonner-toast][data-type="success"] [data-icon] {
+  color: white !important;
+}
+
+[data-sonner-toast][data-type="error"] {
+  background-color: #ef4444 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+}
+
+[data-sonner-toast][data-type="error"] [data-icon] {
+  color: white !important;
+}

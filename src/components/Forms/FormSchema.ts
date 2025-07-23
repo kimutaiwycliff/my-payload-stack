@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 // Password requirements
- export const requirements = [
+export const requirements = [
   { regex: /.{8,}/, text: 'At least 8 characters' },
   { regex: /[0-9]/, text: 'At least 1 number' },
   { regex: /[a-z]/, text: 'At least 1 lowercase letter' },
@@ -10,9 +10,9 @@ import { z } from 'zod'
 
 // Password validation function
 const validatePassword = (password: string) => {
-  const failedRequirements = requirements.filter(req => !req.regex.test(password))
+  const failedRequirements = requirements.filter((req) => !req.regex.test(password))
   if (failedRequirements.length > 0) {
-    return failedRequirements.map(req => req.text).join(', ')
+    return failedRequirements.map((req) => req.text).join(', ')
   }
   return true
 }
@@ -45,3 +45,25 @@ export const SignUpSchema = z
 
 export type SignUpFormData = z.infer<typeof SignUpSchema>
 
+export const ForgotPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: 'Email is required' })
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i, {
+      message: 'Invalid email address',
+    }),
+})
+
+export type ForgotPasswordFormData = z.infer<typeof ForgotPasswordSchema>
+
+export const ResetPasswordSchema = z.object({
+  password: z
+    .string()
+    .refine(validatePassword, {
+      message: 'Password must meet the following requirements',
+    })
+    .min(1, { message: 'Password is required' }),
+  confirmPassword: z.string().min(1, { message: 'Password confirmation is required' }),
+})
+
+export type ResetPasswordFormData = z.infer<typeof ResetPasswordSchema>

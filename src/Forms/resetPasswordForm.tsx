@@ -1,57 +1,121 @@
 'use client'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Form } from '@/components/ui/form'
+import { cn } from '@/utilities/ui'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ResetPasswordSchema } from '@/components/Forms/FormSchema'
+import { ResetPasswordFormData } from '@/components/Forms/FormSchema'
+import { toast } from 'sonner'
+import { CustomFormField } from '@/components/Forms/CustomFormField'
+import { Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { authClient } from '@/lib/auth-client'
 
-import React, { ReactElement, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { resetPassword, ResetPasswordResponse } from '@/actions/resetPassword'
-import { FormContainer, FormInput, SubmitButton } from '@/components/FormContainer'
-
-export default function ResetForm({ token }: { token: string }): ReactElement {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export function ResetPasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const searchParams = useSearchParams()
+  const token = searchParams.get('token') as string
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const form = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(ResetPasswordSchema),
+    defaultValues: {
+      password: '',
+      confirmPassword: '',
+    },
+  })
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
-    event.preventDefault()
+  const onSubmit = async (values: ResetPasswordFormData) => {
+    const toastId = toast.loading('Resetting password...')
     setIsLoading(true)
-    setError(null)
 
-    const formData = new FormData(event.currentTarget)
-
-    const password = formData.get('password') as string
-    const confirmPassword = formData.get('confirmPassword') as string
-
-    if (password !== confirmPassword) {
-      setError(`Passwords don't match`)
+    if (values.password !== values.confirmPassword) {
+      toast.error('Passwords do not match', { id: toastId })
       setIsLoading(false)
       return
     }
 
-    const result: ResetPasswordResponse = await resetPassword({ token, password })
+    const { error } = await authClient.resetPassword({
+      newPassword: values.password,
+      token,
+    })
+
+    if (error) {
+      toast.error(error.message as string, { id: toastId })
+    } else {
+      toast.success('Password reset successfully', { id: toastId })
+      router.push('/login')
+    }
 
     setIsLoading(false)
-
-    if (result.success) {
-      router.push(
-        `/login?message=${encodeURIComponent('Password reset successful. Login with your new password.')}`,
-      )
-    } else {
-      setError(result.error || 'An error occurred.')
-    }
   }
 
   return (
-    <FormContainer heading={'Reset your password'}>
-      <form className={`flex flex-col gap-4`} onSubmit={handleSubmit}>
-        <FormInput label={'Password'} type={'password'} name={'password'} />
-        <FormInput
-          label={'Confirm Password'}
-          type={'password'}
-          name={'confirmPassword'}
-          placeholder={`Confirm your new password`}
-        />
-        {error && <div className={`text-red-400`}>{error}</div>}
-        <SubmitButton loading={isLoading} text={`Reset password`} />
-      </form>
-    </FormContainer>
+    <div className={cn('flex flex-col gap-6', className)} {...props}>
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">Reset Password</CardTitle>
+          <CardDescription>Enter your new password</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="grid gap-6">
+                <div className="grid gap-6">
+                  <div className="grid gap-2">
+                    <CustomFormField
+                      name="password"
+                      label="Password"
+                      placeholder="**************"
+                      type="password"
+                      forgotPasswordLink={false}
+                      showPasswordStrength={true}
+                      initialValue={''}
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <CustomFormField
+                      name="confirmPassword"
+                      label="Confirm Password"
+                      placeholder="**************"
+                      type="password"
+                      forgotPasswordLink={false}
+                      showPasswordStrength={false}
+                      initialValue={''}
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="size-4 animate-spin" />
+                        <span>Resetting Password...</span>
+                      </div>
+                    ) : (
+                      'Reset Password'
+                    )}
+                  </Button>
+                </div>
+                <div className="text-center text-sm">
+                  Don&apos;t have an account?{' '}
+                  <Link
+                    href="/register"
+                    className="underline underline-offset-4 hover:text-primary"
+                  >
+                    Sign up
+                  </Link>
+                </div>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
+        By clicking continue, you agree to our <a href="#">Terms of Service</a> and{' '}
+        <a href="#">Privacy Policy</a>.
+      </div>
+    </div>
   )
 }

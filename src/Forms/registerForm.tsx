@@ -38,7 +38,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
 
     if (success) {
       toast.success(message as string, { id: toastId })
-      router.push('/')
+      router.push('/login')
     } else {
       toast.error(message as string, { id: toastId })
     }

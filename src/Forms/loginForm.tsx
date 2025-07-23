@@ -36,7 +36,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
 
     if (success) {
       toast.success(message as string, { id: toastId })
-      router.push('/login')
+      router.push('/')
     } else {
       toast.error(message as string, { id: toastId })
     }

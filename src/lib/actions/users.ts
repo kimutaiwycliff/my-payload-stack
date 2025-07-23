@@ -8,7 +8,6 @@ export const signIn = async (email: string, password: string) => {
                 email,
                 password,
                 rememberMe: false,
-                callbackURL: "/"
             }
         })
 
@@ -33,7 +32,6 @@ export const signUp = async (name: string, email: string, password: string ) => 
                 name,
                 email,
                 password,
-                callbackURL: "/login"
             }
         })
 
